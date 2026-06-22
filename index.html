@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arthur Bandeira — Engenharia de Software</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul:   #0B2545;
+  --verde:  #006B2F;
+  --ouro:   #FFDF00;
+  --areia:  #F7F4EE;
+  --branco: #FFFFFF;
+  --texto:  #1a1a1a;
+  --muted:  #717171;
+  --borda:  rgba(11,37,69,0.1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--areia); color: var(--texto); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5%;
+  background: rgba(247,244,238,0.92);
+  backdrop-filter: blur(16px);
+  
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo svg { width: 32px; height: 32px; }
+.nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.1em; color: var(--azul); }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color .2s; }
+.nav-links a:hover { color: var(--azul); }
+.nav-cta { background: var(--azul) !important; color: var(--areia) !important; padding: 9px 20px !important; border-radius: 100px; transition: background .2s !important; }
+.nav-cta:hover { background: var(--verde) !important; }
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
+.nav-toggle span { display: block; width: 22px; height: 2px; background: var(--azul); border-radius: 2px; transition: .3s; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 7rem 5% 4rem;
+}
+.hero-inner {
+  max-width: 1200px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--verde); margin-bottom: 1.5rem;
+}
+.hero-eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--verde); display: block; }
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(70px, 7.5vw, 116px);
+  line-height: .92; letter-spacing: .02em;
+  color: var(--azul); margin-bottom: 1.75rem;
+}
+.hero-title span { color: var(--verde); display: block; }
+.hero-desc { font-size: 17px; line-height: 1.75; color: var(--muted); max-width: 440px; margin-bottom: 2.5rem; }
+.hero-desc em { font-style: italic; font-family: 'DM Serif Display', serif; color: var(--texto); }
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 100px; font-size: 14px; font-weight: 500; letter-spacing: .03em; text-decoration: none; transition: all .25s; cursor: pointer; border: none; }
+.btn-primary { background: var(--azul); color: var(--areia); }
+.btn-primary:hover { background: var(--verde); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(11,37,69,.18); }
+.btn-ghost { border: 1.5px solid var(--azul); color: var(--azul); background: transparent; }
+.btn-ghost:hover { background: var(--azul); color: var(--areia); transform: translateY(-2px); }
+
+/* Hero card */
+.hero-card {
+  background: var(--azul); border-radius: 24px; padding: 2.5rem;
+  position: relative; overflow: hidden;
+}
+.hero-card::before {
+  content: ''; position: absolute; top: -80px; right: -80px;
+  width: 240px; height: 240px; background: var(--ouro);
+  border-radius: 50%; opacity: .06;
+}
+.hero-card-avatar { width: 64px; height: 64px; margin-bottom: 1.5rem; }
+.hero-card-name { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: .06em; color: var(--areia); margin-bottom: 4px; }
+.hero-card-role { font-size: 12px; color: var(--ouro); letter-spacing: .12em; text-transform: uppercase; font-weight: 600; margin-bottom: 1.5rem; }
+.hero-card-line { height: 1px; background: rgba(247,244,238,.1); margin-bottom: 1.5rem; }
+.hero-info { display: flex; flex-direction: column; gap: 10px; }
+.info-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(247,244,238,.6); }
+.info-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ouro); flex-shrink: 0; }
+.hero-badge {
+  display: inline-block; margin-top: 1.5rem;
+  background: rgba(247,244,238,.07); border: 1px solid rgba(247,244,238,.14);
+  color: var(--areia); font-size: 11px; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; padding: 6px 14px; border-radius: 100px;
+}
+
+/* ── SOBRE ── */
+.sobre { background: var(--azul); padding: 7rem 5%; }
+.sobre-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--ouro); margin-bottom: 1rem; }
+.sobre-title { font-family: 'DM Serif Display', serif; font-size: clamp(34px, 3.5vw, 50px); line-height: 1.18; color: var(--areia); margin-bottom: 1.5rem; }
+.sobre-title em { font-style: italic; color: var(--ouro); }
+.sobre-p { font-size: 16px; line-height: 1.8; color: rgba(247,244,238,.65); margin-bottom: 1rem; }
+.sobre-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+.stat { border-top: 2px solid rgba(255,223,0,.4); padding-top: 1rem; }
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: var(--ouro); line-height: 1; margin-bottom: 4px; }
+.stat-lbl { font-size: 12px; color: rgba(247,244,238,.45); letter-spacing: .08em; text-transform: uppercase; }
+.skills-stack { display: flex; flex-direction: column; gap: 12px; }
+.skill-row {
+  background: rgba(247,244,238,.05); border: 1px solid rgba(247,244,238,.08);
+  border-radius: 14px; padding: 1.25rem 1.5rem;
+  display: flex; align-items: center; gap: 1rem;
+  transition: background .2s;
+}
+.skill-row:hover { background: rgba(247,244,238,.09); }
+.skill-icon {
+  width: 44px; height: 44px; border-radius: 11px;
+  background: rgba(255,223,0,.1);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--ouro);
+  flex-shrink: 0; letter-spacing: .04em;
+}
+.skill-info strong { display: block; font-size: 14px; font-weight: 600; color: var(--areia); margin-bottom: 2px; }
+.skill-info span { font-size: 12px; color: rgba(247,244,238,.4); }
+
+/* ── PROJETOS ── */
+.projetos { padding: 7rem 5%; background: var(--areia); }
+.projetos-inner { max-width: 1200px; margin: 0 auto; }
+.sec-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3.5rem; flex-wrap: wrap; gap: 1rem; }
+.sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 5.5vw, 80px); letter-spacing: .03em; color: var(--azul); line-height: 1; }
+.sec-title span { color: var(--verde); }
+.sec-sub { font-size: 13px; color: var(--muted); max-width: 280px; text-align: right; line-height: 1.6; }
+
+/* Grid de projetos */
+.proj-grid { display: flex; flex-direction: column; gap: 2px; }
+
+.proj-item {
+  background: var(--branco);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--borda);
+  margin-bottom: 2rem;
+  transition: box-shadow .3s;
+}
+.proj-item:hover { box-shadow: 0 24px 60px rgba(11,37,69,.1); }
+
+/* Header do projeto */
+.proj-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.75rem 2rem;
+  
+  cursor: pointer;
+  user-select: none;
+}
+.proj-header-left { display: flex; align-items: center; gap: 1.25rem; }
+.proj-num { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: rgba(11,37,69,.12); line-height: 1; letter-spacing: .04em; }
+.proj-meta { display: flex; flex-direction: column; gap: 4px; }
+.proj-tag { font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--verde); }
+.proj-name { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--azul); line-height: 1.15; }
+.proj-header-right { display: flex; align-items: center; gap: 1rem; }
+.proj-techs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tech { font-size: 11px; font-weight: 500; letter-spacing: .06em; color: var(--azul); background: rgba(11,37,69,.07); padding: 4px 11px; border-radius: 100px; }
+.proj-toggle {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--azul); color: var(--areia);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; transition: transform .3s, background .2s;
+  flex-shrink: 0;
+}
+.proj-item.open .proj-toggle { transform: rotate(45deg); background: var(--verde); }
+
+/* Preview accordion */
+.proj-preview {
+  max-height: 0; overflow: hidden;
+  transition: max-height .5s cubic-bezier(.4,0,.2,1);
+}
+.proj-item.open .proj-preview { max-height: 800px; }
+
+.proj-preview-inner { padding: 0 2rem 2rem; }
+
+.proj-desc-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 2rem; padding: 1.5rem 0; 
+  flex-wrap: wrap;
+}
+.proj-desc { font-size: 15px; line-height: 1.7; color: var(--muted); max-width: 560px; }
+.proj-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--azul); color: var(--areia);
+  padding: 11px 22px; border-radius: 100px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  white-space: nowrap; transition: background .2s, transform .2s;
+  flex-shrink: 0;
+}
+.proj-link:hover { background: var(--verde); transform: translateY(-2px); }
+.proj-link svg { width: 14px; height: 14px; }
+
+
+
+
+
+
+/* ── CONTATO ── */
+.contato { background: var(--azul); padding: 7rem 5%; text-align: center; position: relative; overflow: hidden; }
+.contato::before {
+  content: 'BANDEIRA';
+  position: absolute; font-family: 'Bebas Neue', sans-serif;
+  font-size: 220px; color: rgba(255,223,0,.04);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  white-space: nowrap; pointer-events: none; letter-spacing: .04em;
+}
+.contato-inner { max-width: 620px; margin: 0 auto; position: relative; z-index: 1; }
+.contato-title { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 58px); color: var(--areia); line-height: 1.15; margin-bottom: 1.25rem; }
+.contato-title em { font-style: italic; color: var(--ouro); }
+.contato-sub { font-size: 16px; color: rgba(247,244,238,.6); line-height: 1.75; margin-bottom: 2.5rem; }
+.contato-email { font-family: 'Bebas Neue', sans-serif; font-size: clamp(22px, 3.5vw, 38px); letter-spacing: .06em; color: var(--ouro); text-decoration: none; display: block; margin-bottom: 2.5rem; transition: opacity .2s; }
+.contato-email:hover { opacity: .75; }
+.socials { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.social { border: 1px solid rgba(247,244,238,.2); color: rgba(247,244,238,.7); padding: 10px 22px; border-radius: 100px; font-size: 13px; font-weight: 500; text-decoration: none; letter-spacing: .04em; transition: all .2s; }
+.social:hover { background: rgba(247,244,238,.08); color: var(--areia); }
+
+/* ── FOOTER ── */
+footer { background: #060E19; padding: 2rem 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: .08em; color: rgba(247,244,238,.25); }
+.footer-brand span { color: var(--ouro); }
+.footer-copy { font-size: 12px; color: rgba(247,244,238,.2); letter-spacing: .04em; }
+
+/* ── REVEALS ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: .1s; } .d2 { transition-delay: .2s; } .d3 { transition-delay: .3s; }
+
+/* ── MOBILE ── */
+@media (max-width: 900px) {
+  /* NAV */
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 68px; left: 0; right: 0;
+    background: var(--areia); padding: 1.5rem 5%;
+    border-bottom: 1px solid var(--borda); gap: 1.25rem; z-index: 199;
+  }
+
+  /* HERO */
+  .hero { padding: 5.5rem 5% 3rem; min-height: auto; }
+  .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .hero-card { order: -1; }
+  .hero-title { font-size: clamp(54px, 13vw, 88px) !important; }
+  .hero-desc { font-size: 15px; max-width: 100%; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+
+  /* SOBRE */
+  .sobre { padding: 4rem 5%; }
+  .sobre-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .sobre-title { font-size: clamp(26px, 6.5vw, 40px); }
+  .sobre-stats { grid-template-columns: 1fr 1fr; }
+
+  /* PROJETOS */
+  .projetos { padding: 4rem 5%; }
+  .sec-header { flex-direction: column; align-items: flex-start; gap: .75rem; }
+  .sec-sub { text-align: left; max-width: 100%; }
+  .proj-header { flex-direction: column; align-items: flex-start; gap: .875rem; padding: 1.25rem; }
+  .proj-header-right { width: 100%; justify-content: space-between; }
+  .proj-preview-inner { padding: 0 1.25rem 1.5rem; }
+  .proj-desc-row { flex-direction: column; gap: 1rem; }
+  .proj-link { width: 100%; justify-content: center; }
+  .proj-num { font-size: 32px; }
+  .proj-name { font-size: 20px; }
+
+  /* CONTATO */
+  .contato { padding: 4rem 5%; }
+  .contato-title { font-size: clamp(28px, 7.5vw, 46px); }
+  .contato-email { font-size: clamp(14px, 4.5vw, 22px); word-break: break-all; }
+  .contato-socials { gap: .6rem; }
+  .social-btn { font-size: 12px; padding: 8px 14px; }
+
+  /* FOOTER */
+  footer { flex-direction: column; align-items: flex-start; gap: .5rem; padding: 1.5rem 5%; }
+}
+
+@media (max-width: 480px) {
+  nav { padding: 0 4%; }
+  .hero { padding: 5rem 4% 2.5rem; }
+  .hero-title { font-size: clamp(48px, 14vw, 72px) !important; }
+  .sobre { padding: 3.5rem 4%; }
+  .projetos { padding: 3.5rem 4%; }
+  .contato { padding: 3.5rem 4%; }
+  footer { padding: 1.25rem 4%; }
+
+  .hero-card { padding: 1.5rem; }
+  .hero-card-name { font-size: 22px; }
+  .hero-card-role { font-size: 10px; }
+
+  .skill-row { padding: .875rem 1rem; }
+  .skill-icon { width: 36px; height: 36px; font-size: 11px; }
+  .skill-text strong { font-size: 13px; }
+
+  .stat-num { font-size: 42px; }
+  .section-title { font-size: clamp(34px, 11vw, 54px); }
+
+  .proj-techs { display: none; }
+  .proj-name { font-size: 18px; }
+  .proj-desc { font-size: 13.5px; }
+
+  .contato::before { font-size: 80px; }
+  .contato-email { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 200 200" fill="none">
+      <rect width="200" height="200" rx="48" fill="#0B2545"/>
+      <polygon points="100,22 172,100 100,172 28,100" fill="#FFDF00"/>
+      <circle cx="100" cy="100" r="46" fill="#006B2F"/>
+      <path d="M72 88L60 100L72 112" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M128 88L140 100L128 112" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="108" y1="83" x2="92" y2="117" stroke="#FFDF00" stroke-width="4.5" stroke-linecap="round"/>
+    </svg>
+    <span class="nav-brand">BANDEIRA</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#contato" class="nav-cta">Contato</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow reveal">Portfólio Profissional</div>
+      <h1 class="hero-title reveal d1">ARTHUR<span>BANDEIRA</span></h1>
+      <p class="hero-desc reveal d2">
+        Estudante de Engenharia de Software na UCB — construo interfaces que
+        <em>fazem sentido</em>, do conceito ao código. Cada projeto com propósito real.
+      </p>
+      <div class="hero-actions reveal d3">
+        <a href="#projetos" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Ver projetos
+        </a>
+        <a href="#contato" class="btn btn-ghost">Contato</a>
+      </div>
+    </div>
+    <div class="reveal d2">
+      <div class="hero-card">
+        <svg class="hero-card-avatar" viewBox="0 0 200 200" fill="none">
+          <rect width="200" height="200" rx="48" fill="#0B2545"/>
+          <polygon points="100,22 172,100 100,172 28,100" fill="#FFDF00"/>
+          <circle cx="100" cy="100" r="46" fill="#006B2F"/>
+          <path d="M72 88L60 100L72 112" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M128 88L140 100L128 112" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="108" y1="83" x2="92" y2="117" stroke="#FFDF00" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+        <div class="hero-card-name">ARTHUR BANDEIRA</div>
+        <div class="hero-card-role">Eng. Software · UCB · Brasília</div>
+        <div class="hero-card-line"></div>
+        <div class="hero-info">
+          <div class="info-row"><div class="info-dot"></div><span>Frontend & UX</span></div>
+          <div class="info-row"><div class="info-dot"></div><span>Cybersecurity & Infraestrutura</span></div>
+          <div class="info-row"><div class="info-dot"></div><span>3 projetos entregues</span></div>
+          <div class="info-row"><div class="info-dot"></div><span>Aberto a oportunidades</span></div>
+        </div>
+        <div class="hero-badge">@bandeira.dev_</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="sobre" id="sobre">
+  <div class="sobre-inner">
+    <div>
+      <p class="eyebrow reveal">Sobre mim</p>
+      <h2 class="sobre-title reveal d1">Código que <em>resolve</em>,<br>não só que funciona.</h2>
+      <p class="sobre-p reveal d2">Sou Arthur Bandeira de Souza, estudante de Engenharia de Software na UCB, Brasília. Comecei a programar por curiosidade — hoje é onde passo a maior parte do meu tempo criando.</p>
+      <p class="sobre-p reveal d2">Acredito que tecnologia tem o poder de mudar lugares e histórias. Por isso cada projeto que entrego tem propósito real — não só código funcionando.</p>
+      <div class="sobre-stats reveal d3">
+        <div class="stat"><div class="stat-num">3</div><div class="stat-lbl">Projetos entregues</div></div>
+        <div class="stat"><div class="stat-num">UCB</div><div class="stat-lbl">Eng. de Software</div></div>
+      </div>
+    </div>
+    <div class="skills-stack reveal d2">
+      <div class="skill-row"><div class="skill-icon">&lt;/&gt;</div><div class="skill-info"><strong>Frontend & UX</strong><span>HTML · CSS · JavaScript · Figma</span></div></div>
+      <div class="skill-row"><div class="skill-icon">SEC</div><div class="skill-info"><strong>Cybersecurity</strong><span>Segurança de sistemas · Redes</span></div></div>
+      <div class="skill-row"><div class="skill-icon">INF</div><div class="skill-info"><strong>Infraestrutura</strong><span>Servidores · Deploy · Arquitetura</span></div></div>
+      <div class="skill-row"><div class="skill-icon">{ }</div><div class="skill-info"><strong>Lógica & Algoritmos</strong><span>POO · Estruturas de dados · Git</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section class="projetos" id="projetos">
+  <div class="projetos-inner">
+    <div class="sec-header reveal">
+      <h2 class="sec-title">PROJETOS<span>.</span></h2>
+      <p class="sec-sub">Clique em cada projeto para ver o preview e os detalhes.</p>
+    </div>
+
+    <div class="proj-grid">
+
+      <!-- PROJETO 1 — LUMEN -->
+      <div class="proj-item reveal" id="proj1">
+        <div class="proj-header" onclick="toggleProject('proj1')">
+          <div class="proj-header-left">
+            <div class="proj-num">01</div>
+            <div class="proj-meta">
+              <div class="proj-tag">Marketing Digital</div>
+              <div class="proj-name">Lumen — Agência de Marketing</div>
+            </div>
+          </div>
+          <div class="proj-header-right">
+            <div class="proj-techs">
+              <span class="tech">HTML</span>
+              <span class="tech">CSS</span>
+              <span class="tech">JavaScript</span>
+            </div>
+            <div class="proj-toggle">+</div>
+          </div>
+        </div>
+        <div class="proj-preview">
+          <div class="proj-preview-inner">
+            <div class="proj-desc-row">
+              <p class="proj-desc">Site institucional para empresa de marketing digital. Foco em conversão, apresentação de serviços e identidade visual forte. Desenvolvido com HTML, CSS e JavaScript puros — sem frameworks.</p>
+              <a href="https://lumen-produtora-audiovisal.github.io/Lumen/" target="_blank" class="proj-link">
+                Abrir projeto
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJETO 2 — ANA SANTANA -->
+      <div class="proj-item reveal d1" id="proj2">
+        <div class="proj-header" onclick="toggleProject('proj2')">
+          <div class="proj-header-left">
+            <div class="proj-num">02</div>
+            <div class="proj-meta">
+              <div class="proj-tag">Portfólio Pessoal</div>
+              <div class="proj-name">Ana Santana — Portfólio</div>
+            </div>
+          </div>
+          <div class="proj-header-right">
+            <div class="proj-techs">
+              <span class="tech">HTML</span>
+              <span class="tech">CSS</span>
+              <span class="tech">Design</span>
+            </div>
+            <div class="proj-toggle">+</div>
+          </div>
+        </div>
+        <div class="proj-preview">
+          <div class="proj-preview-inner">
+            <div class="proj-desc-row">
+              <p class="proj-desc">Portfólio desenvolvido para Ana Santana com identidade visual autoral — tipografia refinada, paleta suave e layout editorial. Responsivo e com atenção especial à experiência do usuário.</p>
+              <a href="https://portifolio-anaasantana.netlify.app/" target="_blank" class="proj-link">
+                Abrir projeto
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJETO 3 — HEMOFILIA -->
+      <div class="proj-item reveal d2" id="proj3">
+        <div class="proj-header" onclick="toggleProject('proj3')">
+          <div class="proj-header-left">
+            <div class="proj-num">03</div>
+            <div class="proj-meta">
+              <div class="proj-tag">Saúde & Informação</div>
+              <div class="proj-name">Dia Mundial da Hemofilia</div>
+            </div>
+          </div>
+          <div class="proj-header-right">
+            <div class="proj-techs">
+              <span class="tech">HTML</span>
+              <span class="tech">CSS</span>
+              <span class="tech">Acessibilidade</span>
+            </div>
+            <div class="proj-toggle">+</div>
+          </div>
+        </div>
+        <div class="proj-preview">
+          <div class="proj-preview-inner">
+            <div class="proj-desc-row">
+              <p class="proj-desc">Site informativo sobre o Dia Mundial da Hemofilia — conteúdo acessível, estrutura clara e design com propósito social. Desenvolvido com foco em hierarquia da informação e leiturabilidade.</p>
+              <a href="https://splendorous-scone-f3057f.netlify.app/" target="_blank" class="proj-link">
+                Abrir projeto
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contato" id="contato">
+  <div class="contato-inner">
+    <p class="eyebrow reveal">Contato</p>
+    <h2 class="contato-title reveal d1">Vamos construir<br><em>algo junto?</em></h2>
+    <p class="contato-sub reveal d2">Estou aberto a projetos, estágios e colaborações. Manda uma mensagem — respondo sempre.</p>
+    <a href="mailto:arthur@bandeira.dev" class="contato-email reveal d2">ARTHUR@BANDEIRA.DEV</a>
+    <div class="socials reveal d3">
+      <a href="https://instagram.com/bandeira.dev_" target="_blank" class="social">Instagram</a>
+      <a href="https://github.com" target="_blank" class="social">GitHub</a>
+      <a href="https://linkedin.com" target="_blank" class="social">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">BAND<span>EIRA</span></div>
+  <div class="footer-copy">© 2026 — Arthur Bandeira de Souza</div>
+</footer>
+
+<script>
+// ── Reveals
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+window.addEventListener('load', () => {
+  document.querySelectorAll('.hero .reveal').forEach((el,i) => {
+    setTimeout(() => el.classList.add('in'), 80 + i*100);
+  });
+});
+
+// ── Mobile nav
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// ── Accordion projetos com lazy iframe
+
+function toggleProject(id) {
+  const item = document.getElementById(id);
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.proj-item').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>
